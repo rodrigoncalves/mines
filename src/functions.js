@@ -1,5 +1,5 @@
-const createBoard = (rows, columns) =>
-  Array(rows)
+const createBoard = (rows, columns) => {
+  return Array(rows)
     .fill(0)
     .map((_, row) =>
       Array(columns)
@@ -15,9 +15,9 @@ const createBoard = (rows, columns) =>
           };
         }),
     );
+};
 
-const spreadMines = (originalBoard, minesAmount) => {
-  const board = cloneBoard(originalBoard);
+const spreadMines = (board, minesAmount) => {
   const rows = board.length;
   const columns = board[0].length;
   let minesPlanted = 0;
@@ -35,11 +35,12 @@ const spreadMines = (originalBoard, minesAmount) => {
 
 const createMinedBoard = (rows, columns, minesAmount) => {
   const board = createBoard(rows, columns);
-  return spreadMines(board, minesAmount);
+  spreadMines(board, minesAmount);
+  return board;
 };
 
 const cloneBoard = board => {
-  board.map(rows =>
+  return board.map(rows =>
     rows.map(field => {
       return {...field};
     }),
@@ -88,13 +89,13 @@ const openField = (board, row, column) => {
 
 const fields = board => [].concat(...board);
 const hadExplosion = board => fields(board).some(field => field.exploded);
-const pending = field =>
+const pendding = field =>
   (field.mined && !field.flagged) || (!field.mined && !field.opened);
-const wonGame = board => fields(board).every(!pending);
+const wonGame = board => fields(board).filter(pendding).length === 0;
 const showMines = board =>
   fields(board)
-    .field(field => field.mined)
-    .forEach(field => (field.openField = true));
+    .filter(field => field.mined)
+    .forEach(field => (field.opened = true));
 
 const invertFlag = (board, row, column) => {
   const field = board[row][column];
