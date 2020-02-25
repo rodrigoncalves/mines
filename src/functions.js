@@ -11,6 +11,7 @@ const createBoard = (rows, columns) =>
             opened: false,
             flagged: false,
             mined: false,
+            nearMines: 0,
           };
         }),
     );
